@@ -16,7 +16,7 @@ function App() {
     contextRef.current = context;
   }, []);
 
-  let socket = io(process.env.REACT_APP_SOCKET_URL);
+  let socket = io('http://localhost:3333');
 
   socket.on("updatePlayers", (updatePlayers) => {
     const objective = updatePlayers.find((player) => player.name == "objective");
