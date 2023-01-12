@@ -91,6 +91,10 @@ function App() {
     }
   }
 
+  window.addEventListener('blur', () => {
+    console.log('mudou porque meu amigo')
+  })
+
   const player = new Player({
     y: Math.ceil((Math.random() * 490) / 10) * 10,
     x: Math.ceil((Math.random() * 490) / 10) * 10,
