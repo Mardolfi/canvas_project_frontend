@@ -16,7 +16,7 @@ function App() {
     contextRef.current = context;
   }, []);
 
-  let socket = io('http://localhost:3333');
+  let socket = io('https://canvas-multiplayer-backend.herokuapp.com');
 
   socket.on("updatePlayers", (updatePlayers) => {
     const objective = updatePlayers.find((player) => player.name == "objective");
