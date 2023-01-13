@@ -16,10 +16,12 @@ function App() {
     contextRef.current = context;
   }, []);
 
-  let socket = io('https://canvas-multiplayer-backend.herokuapp.com/');
+  let socket = io("https://canvas-multiplayer-backend.herokuapp.com/");
 
   socket.on("updatePlayers", (updatePlayers) => {
-    const objective = updatePlayers.find((player) => player.name == "objective");
+    const objective = updatePlayers.find(
+      (player) => player.name == "objective"
+    );
     if (objective) {
       updatePlayers
         .filter((player) => player.name !== "objective")
@@ -28,18 +30,23 @@ function App() {
             player.position.x == objective.position.x &&
             player.position.y == objective.position.y
           ) {
-            socket.emit('playerPoint')
+            socket.emit("playerPoint");
           }
         });
     }
-  
-    contextRef.current.clearRect(0, 0, telaRef.current.width, telaRef.current.height);
+
+    contextRef.current.clearRect(
+      0,
+      0,
+      telaRef.current.width,
+      telaRef.current.height
+    );
     updatePlayers.forEach((player) => {
       const playerUpdate = new Player({
         x: player.position.x,
         y: player.position.y,
       });
-  
+
       playerUpdate.draw();
     });
   });
@@ -91,9 +98,9 @@ function App() {
     }
   }
 
-  window.addEventListener('blur', () => {
-    console.log('mudou porque meu amigo')
-  })
+  window.addEventListener("blur", () => {
+    socket.emit('playerLeft', user)
+  });
 
   const player = new Player({
     y: Math.ceil((Math.random() * 490) / 10) * 10,
