@@ -16,7 +16,9 @@ function App() {
     contextRef.current = context;
   }, []);
 
-  let socket = io("https://canvas-multiplayer-backend.herokuapp.com/");
+  // 'https://canvas-multiplayer-backend.herokuapp.com/'
+
+  let socket = io("http://localhost:3333");
 
   socket.on("updatePlayers", (updatePlayers) => {
     const objective = updatePlayers.find(
@@ -98,43 +100,68 @@ function App() {
     }
   }
 
-  window.addEventListener("blur", () => {
-    socket.emit('playerLeft', user)
-  });
-
   const player = new Player({
     y: Math.ceil((Math.random() * 490) / 10) * 10,
     x: Math.ceil((Math.random() * 490) / 10) * 10,
   });
 
+  let ifClick = 'no';
+
+  let time = 10000;
+
   function newPlayer(e) {
-    if (user !== "") {
-      e.preventDefault();
+    e.preventDefault();
+    if(ifClick == 'no'){
+      if (user !== "") {
 
-      socket.emit("newPlayer", {
-        name: user,
-        position: player.position,
-      });
-
-      window.addEventListener("keypress", (e) => {
-        switch (e.key) {
-          case "w":
-            player.toTop();
-            break;
-          case "s":
-            player.toBottom();
-            break;
-          case "d":
-            player.toRight();
-            break;
-          case "a":
-            player.toLeft();
-            break;
-
-          default:
-            break;
-        }
-      });
+        ifClick = 'yes';
+  
+        socket.emit("newPlayer", {
+          name: user,
+          position: player.position,
+          time: time,
+        });
+  
+        let timeLeft = setTimeout(() => {
+          socket.emit('playerLeft', user)
+        }, time)
+  
+        window.addEventListener("keypress", (e) => {
+          switch (e.key) {
+            case "w":
+              player.toTop();
+              clearTimeout(timeLeft)
+              timeLeft = setTimeout(() => {
+                socket.emit('playerLeft', user)
+              }, time)
+              break;
+            case "s":
+              player.toBottom();
+              clearTimeout(timeLeft)
+              timeLeft = setTimeout(() => {
+                socket.emit('playerLeft', user)
+              }, time)
+              break;
+            case "d":
+              player.toRight();
+              clearTimeout(timeLeft)
+              timeLeft = setTimeout(() => {
+                socket.emit('playerLeft', user)
+              }, time)
+              break;
+            case "a":
+              player.toLeft();
+              clearTimeout(timeLeft)
+              timeLeft = setTimeout(() => {
+                socket.emit('playerLeft', user)
+              }, time)
+              break;
+  
+            default:
+              break;
+          }
+        });
+      }
     }
   }
 
