@@ -16,9 +16,9 @@ function App() {
     contextRef.current = context;
   }, []);
 
-  // 'https://canvas-multiplayer-backend.herokuapp.com/'
+  // 'http://localhost:3333'
 
-  let socket = io("http://localhost:3333");
+  let socket = io("https://canvas-multiplayer-backend.herokuapp.com/");
 
   socket.on("updatePlayers", (updatePlayers) => {
     const objective = updatePlayers.find(
